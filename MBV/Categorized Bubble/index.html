@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Bubble Chart</title>
+    <style>
+      body {
+        background-color: #f5f5f5;
+      }
+      #chart {
+        background-image: url('https://www.papertraildesign.com/wp-content/uploads/2019/05/half-inch-standard-graph-paper.jpg');
+        background-size: 200px;
+      }
+      .label {font-size: 14px; text-anchor: middle}
+      #chart svg {display: block; margin: 0 auto}
+      .tick line {stroke: black}
+    </style>
+  </head>
+  <body>
+    <div id="chart"></div>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script>
+    <script>
+      console.log("script.js has started");
+
+      const data = [
+      {name: "Far Left", bias: -2, popularity: 221},
+      {name: "Left Leaning", bias: -1, popularity: 673},
+      {name: "Center", bias: 0, popularity: 137},
+      {name: "Right Leaning", bias: 1, popularity: 52},
+      {name: "Far Right", bias: 2, popularity: 284}
+    ];
+
+  const width = 600, height = 400;
+
+  const svg = d3.select("#chart").append("svg").attr("viewBox", `0 0 ${width} ${height}`).attr("preserveAspectRatio", "xMidYMid meet");
+
+  const xScale = d3.scaleLinear().domain([-2, 2]).range([50, width - 50]);
+  const rScale = d3.scaleSqrt().domain([0, d3.max(data, d => d.popularity)]).range([0, 50]);
+
+  const colorScale = d3.scaleOrdinal().domain(data.map(d => d.name)).range(['#2c7bb6', '#abd9e9', '#ffffbf', '#fdae61', '#d7191c']);
+
+  svg.selectAll("circle").data(data).join("circle").attr("cx", d => xScale(d.bias)).attr("cy", height / 4).attr("r", d => rScale(d.popularity)).attr("fill", d => colorScale(d.name)).attr("opacity", 0.7)
+    .on('mouseover', d => {
+        tip.show(d, event.target);
+        d3.select(event.target).attr('opacity', 1);
+    })
+    .on('mouseout', d => {
+        tip.hide(d, event.target);
+        d3.select(event.target).attr('opacity', 0.7);
+    });
+
+  const labels = svg.selectAll(".label").data(data).join("g").attr("class", "label");
+
+  labels.append("text").text(d => d.name).attr("x", d => xScale(d.bias)).attr("y", height / 4 + 80).attr("text-anchor", "middle").attr("font-weight", "bold");
+
+
+const tip = d3.tip().attr('class', 'd3-tip').html(d => {
+  return `<strong>${d.name}</strong><br>Bias: ${d.bias}<br>Popularity: ${d.popularity}`;
+});
+
+
+svg.call(tip);
+
+const xAxis = d3.axisBottom(xScale).tickValues([-2, -1, 0, 1, 2]).tickFormat(d => {
+if (d === -2) return "Far Left";
+if (d === -1) return "Left Leaning";
+if (d === 0) return "Center";
+if (d === 1) return "Right Leaning";
+if (d === 2) return "Far Right";
+});
+
+svg.append("g")
+  .attr("transform", `translate(0, ${height / 2})`)
+  .call(xAxis)
+  .selectAll("text")
+  .attr("font-size", 12);
+
+const yAxis = d3.axisLeft(d3.scaleLinear()
+                  .domain([0, d3.max(data, d => d.popularity)])
+                  .range([height / 2, 0]))
+                  .ticks(5);
+
+svg.append("g")
+  .attr("transform", `translate(${50}, 0)`)
+  .call(yAxis)
+  .selectAll("text")
+  .attr("font-size", 12);
+
+  </script>
+  </body>
+</html>
