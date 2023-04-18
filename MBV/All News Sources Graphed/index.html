@@ -21,49 +21,53 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script>
     <script>
-    console.log("script.js has started");
 
 const data = [
-{name: "ABC News", bias: 0, popularity: 520},
-  {name: "Al Jazeera", bias: -1, popularity: 310},
-  {name: "Associated Press", bias: 0, popularity: 610},
-  {name: "BBC News", bias: 0, popularity: 840},
-  {name: "Bloomberg", bias: 1, popularity: 320},
-  {name: "Breitbart", bias: 2, popularity: 70},
-  {name: "CBS News", bias: -1, popularity: 470},
-  {name: "CNN", bias: -1, popularity: 930},
-  {name: "Daily Mail", bias: 2, popularity: 240},
-  {name: "Fox News", bias: 2, popularity: 700},
-  {name: "ABC News", bias: 0, popularity: 520},
-  {name: "Al Jazeera", bias: -1, popularity: 310},
-  {name: "Associated Press", bias: 0, popularity: 610},
-  {name: "BBC News", bias: 0, popularity: 840},
-  {name: "Bloomberg", bias: 1, popularity: 320},
-  {name: "Breitbart", bias: 2, popularity: 70},
-  {name: "CBS News", bias: -1, popularity: 470},
-  {name: "CNN", bias: -1, popularity: 930},
-  {name: "Daily Mail", bias: 2, popularity: 240},
-  {name: "Fox News", bias: 2, popularity: 700},
-  {name: "ABC News", bias: 0, popularity: 520},
-  {name: "Al Jazeera", bias: -1, popularity: 310},
-  {name: "Associated Press", bias: 0, popularity: 610},
-  {name: "BBC News", bias: 0, popularity: 840},
-  {name: "Bloomberg", bias: 1, popularity: 320},
-  {name: "Breitbart", bias: 2, popularity: 70},
-  {name: "CBS News", bias: -1, popularity: 470},
-  {name: "CNN", bias: -1, popularity: 930},
-  {name: "Daily Mail", bias: 2, popularity: 240},
-  {name: "Fox News", bias: 2, popularity: 700},
-  {name: "ABC News", bias: 0, popularity: 520},
-  {name: "Al Jazeera", bias: -1, popularity: 310},
-  {name: "Associated Press", bias: 0, popularity: 610},
-  {name: "BBC News", bias: 0, popularity: 840},
-  {name: "Bloomberg", bias: 1, popularity: 320},
-  {name: "Breitbart", bias: 2, popularity: 70},
-  {name: "CBS News", bias: -1, popularity: 470},
-  {name: "CNN", bias: -1, popularity: 930},
-  {name: "Daily Mail", bias: 2, popularity: 240},
-  {name: "Fox News", bias: 2, popularity: 700},
+  //Far left
+  {name: "The Atlantic", bias: -2, popularity: 276.31},
+  {name: "Buzzfeed News", bias: -2, popularity: 276.11},
+  {name: "Democracy NOW!", bias: -2, popularity: 702.93},
+  {name: "HUFFPOST", bias: -2, popularity: 717.89},
+  {name: "MSNBC", bias: -2, popularity: 14811.74},
+  {name: "The New Yorker", bias: -2, popularity: 333.04},
+  {name: "Slate", bias: -2, popularity: 237.93},
+  {name: "Vox", bias: -2, popularity: 4821.73},
+  //Left leaning
+  {name: "ABC News", bias: -1, popularity: 18936.86},
+  {name: "CBS", bias: -1, popularity: 6291.56},
+  {name: "CNN", bias: -1, popularity: 20810.32},
+  {name: "INSIDER", bias: -1, popularity: 7000.53},
+  {name: "NBC", bias: -1, popularity: 7920.53},
+  {name: "The New York Times", bias: -1, popularity: 2367.55},
+  {name: "The Washington Post", bias: -1, popularity: 1792.58},
+  {name: "USA Today", bias: -1, popularity: 2270.95},
+  //Center
+  {name: "BBC", bias: 0, popularity: 6804.94},
+  {name: "Forbes", bias: 0, popularity: 344.61},
+  {name: "MarketWatch", bias: 0, popularity: 26.66},
+  {name: "NEWSNATION", bias: 0, popularity: 661.33},
+  {name: "Newsweek", bias: 0, popularity: 88.04},
+  {name: "Reuturs", bias: 0, popularity: 1566.97},
+  {name: "The Hill", bias: 0, popularity: 1863.33},
+  {name: "The Wall Street Journal", bias: 0, popularity: 2561.65},
+  //Right leaning
+  {name: "The Epoch Times", bias: 1, popularity: 132.11},
+  {name: "Fox Business", bias: 1, popularity: 3566.24},
+  {name: "IJR", bias: 1, popularity: 35.19},
+  {name: "New York Post", bias: 1, popularity: 1066.02},
+  {name: "The Post Millenial", bias: 1, popularity: 5.64},
+  {name: "Reason", bias: 1, popularity: 403.42},
+  {name: "Washington Examiner", bias: 1, popularity: 6.27},
+  {name: "The Washington Times", bias: 1, popularity: 10.22},
+  //Far Right
+  {name: "Blaze", bias: 2, popularity: 1097.45},
+  {name: "CBN", bias: 2, popularity: 430.39},
+  {name: "Daily Mail", bias: 2, popularity: 2610.14},
+  {name: "Daily Wire", bias: 2, popularity: 1365.94},
+  {name: "FOX News", bias: 2, popularity: 21425.77},
+  {name: "Newsmax", bias: 2, popularity: 878.32},
+  {name: "The Washington Free Beacon", bias: 2, popularity: 259.33},
+  {name: "OAN Network", bias: 2, popularity: 339.72},
 ];
 
 function getBiasCategory(bias) {
@@ -110,14 +114,6 @@ svg.append("g")
   .attr("class", "y-axis")
   .attr("transform", "translate(50,0)")
   .call(yAxis);
-
-const tip = d3.tip()
-  .attr('class', 'd3-tip')
-  .html(function(d) {
-    return `<span>${d.name}</span><br/><span>Popularity: ${d.popularity}</span><br/><span>Bias: ${getBiasCategory(d.bias)}</span>`;
-  });
-
-svg.call(tip);
 
 svg.selectAll("circle")
   .data(data)
